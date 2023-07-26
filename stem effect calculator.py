@@ -1,5 +1,31 @@
 from math import pi
 
+# VARIABLES
+
+# geometry
+probe_diameter      = 1
+probe_wall          = 1
+probe_length        = 1
+wire_diameter       = 1
+wire_wall           = 1
+wire_length_norm    = 1
+wire_length_exposed = 1
+coat_thickness      = 1
+sensor_diameter     = 1
+epoxy_length        = 1
+
+# material characteristics
+probe_conductivity  = 1
+epoxy_conductivity  = 1
+wire_conductivity   = 1
+coat_conductivity   = 1
+
+# system characteristics
+temperature_delta   = 1
+convection_coeff    = 1
+
+# SYSTEM OF EQUATIONS
+
 # Q = (k*A/x)*(Tf-Ti)                 (linear heat conduction)
 # Q = ((k*2pi*x)/ln(r2/r1))*(Tf-Ti)   (radial heat conduction)
 # Q = h*A*(Tf-Ti)                     (convective heat transfer)
@@ -50,5 +76,14 @@ def Ra3(k, r1, r2, l):
     Ra3 = ((k*2*pi*x)/ln(r2/r1))**-1
     return Ra3
 
+Ra1 = Ra1(k=wire_conductivity, r=wire_diameter/2, l=wire_length_norm)
+Ra2 = Ra2(k=coat_conductivity, r1=wire_diameter/2, r2=coat_thickness+(wire_diameter/2), l=wire_length_norm)
+Ra3 = Ra3(k=epoxy_conductivity, r1=coat_thickness+(wire_diameter/2), r2=(probe_diameter/2)-probe_wall, l=epoxy_length)
 
+Ra = Ra(Ra1=Ra1, Ra2=Ra2, Ra3=Ra3)
+Rb = Rb(k=epoxy_conductivity, r1=sensor_diameter, r2=(probe_diameter/2)-probe_wall, l=epoxy_length)
+
+R3 = R3(Ra=Ra, Rb=Rb)
+R2 = R2(k=probe_conductivity, r1=(probe_diameter/2)-probe_wall, r2=probe_diameter/2, l=probe_length)
+R1 = R1(h=convection_coeff, r=probe_diameter/2, l=probe_length)
 
