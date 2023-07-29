@@ -87,3 +87,6 @@ R3 = R3(Ra=Ra, Rb=Rb)
 R2 = R2(k=probe_conductivity, r1=(probe_diameter/2)-probe_wall, r2=probe_diameter/2, l=probe_length)
 R1 = R1(h=convection_coeff, r=probe_diameter/2, l=probe_length)
 
+Rtot = Rtotal(R1=R1, R2=R2, R3=R3)
+
+HT_Rate = Rtot**-1
